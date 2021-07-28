@@ -1,7 +1,7 @@
 # Проект «Большое путешествие»
 
 * Студент: [Паша](https://up.htmlacademy.ru/ecmascript/15/user/1792173).
-* Наставник: `Неизвестно`.
+* Наставник: [Альбина](https://htmlacademy.ru/profile/id167491).
 
 ---
 
