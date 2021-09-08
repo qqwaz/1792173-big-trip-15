@@ -5,7 +5,8 @@ import { PointTypes } from '../const.js';
 const availableOffers = PointTypes
   .map((type) => ({
     type,
-    offers: getShuffledArray(offers, getRandomInt(5)),
+    offers: getShuffledArray(offers, getRandomInt(10)),
   }));
 
-export const getOffers = (type) => availableOffers.filter((item) => item.type === type);
+export const getOffers = (type) => availableOffers.find((item) => item.type === type).offers;
+
