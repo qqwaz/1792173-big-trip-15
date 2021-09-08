@@ -1,4 +1,4 @@
-export const Offers = [
+const Offers = [
   {
     'type': 'taxi',
     'offers': [
@@ -164,3 +164,5 @@ export const Offers = [
       }],
   },
 ];
+
+export const offers = Offers.map((offer) => offer.offers).flat();

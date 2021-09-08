@@ -1,4 +1,4 @@
-export const Destinations = [
+const Destinations = [
   {
     'name': 'Chamonix',
     'description': 'Chamonix, for those who value comfort and coziness, with an embankment of a mighty river as a centre of attraction, full of of cozy canteens where you can try the best coffee in the Middle East.',
@@ -796,3 +796,7 @@ export const Destinations = [
       }],
   },
 ];
+
+export const names = Destinations.map((point) => point.name);
+export const descriptions = Destinations.map((point) => point.description);
+export const pictures = Destinations.map((point) => point.pictures).flat();
