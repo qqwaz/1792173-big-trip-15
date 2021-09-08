@@ -2,7 +2,7 @@ import { getDestination } from './destinations.mock.js';
 import { getOffers } from './offers.mock.js';
 import { PointTypes } from '../const.js';
 import { getRandomInt, getRandomArrayElement, getShuffledArray } from '../utils.js';
-import { addDays, addMinutes} from 'date-fns';
+import { addDays, addMinutes } from 'date-fns';
 
 const JOURNEY_START_DATE = addDays(new Date(), getRandomInt(10));
 const MAX_MINUTES_BETWEEN_POINTS = 60;

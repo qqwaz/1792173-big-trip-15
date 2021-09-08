@@ -1,10 +1,10 @@
-import {createMenuTemplate} from './view/menu.js';
-import {createSummaryTemplate} from './view/summary.js';
-import {createFiltersTemplate} from './view/filters.js';
-import {createSortingTemplate} from './view/sorting.js';
-import {createEventsListTemplate} from './view/events-list.js';
-import {createEventEditTemplate} from './view/event-edit.js';
-import {createEventTemplate} from './view/event.js';
+import { createMenuTemplate } from './view/menu.js';
+import { createSummaryTemplate } from './view/summary.js';
+import { createFiltersTemplate } from './view/filters.js';
+import { createSortingTemplate } from './view/sorting.js';
+import { createEventsListTemplate } from './view/events-list.js';
+import { createEventEditTemplate } from './view/event-edit.js';
+import { createEventTemplate } from './view/event.js';
 import { getPoints } from './mocks/points.mock.js';
 import * as Utl from './utils.js';
 
