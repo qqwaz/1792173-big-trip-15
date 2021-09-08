@@ -1,12 +1,12 @@
-import * as Utl from '../utils.js';
 import { PointTypes } from '../const.js';
-import { Destinations } from '../mocks/destinations.const.js';
-import { Offers } from '../mocks/offers.const.js';
+import { names as cities } from '../mocks/destinations.const.js';
+import { getOffers } from '../mocks/offers.mock.js';
+import { format } from 'date-fns';
 
 export const createEventEditTemplate = (point) => {
 
   const createTypeElement = () => {
-    const typesListElement = Object.keys(PointTypes)
+    const typesListElement = PointTypes
       .map((type) => `
         <div class="event__type-item">
           <input
@@ -19,12 +19,12 @@ export const createEventEditTemplate = (point) => {
             class="event__type-label event__type-label--${type}"
             for="event-type-${type}-1"
           >
-            ${PointTypes[type].label}
+            ${type}
           </label>
         </div>`)
       .join('');
 
-    const icon = point ? PointTypes[point.type].icon : '';
+    const icon = point ? `img/icons/${point.type}.png` : '';
 
     return `
       <div class="event__type-wrapper">
@@ -44,9 +44,9 @@ export const createEventEditTemplate = (point) => {
   };
 
   const createDestinationElement = () => {
-    const citiesListElement = Destinations
+    const citiesListElement = cities
       .map((city) => `
-        <option value=${city.name}>${city.name}</option>`)
+        <option value=${city}>${city}</option>`)
       .join('');
 
     const destination = point ? point.destination.name : '';
@@ -72,8 +72,8 @@ export const createEventEditTemplate = (point) => {
   };
 
   const createTimeElement = () => {
-    const startTime = point ? Utl.format(point.dateFrom, 'dd/MM/yy HH:mm') : '';
-    const endTime = point ? Utl.format(point.dateTo, 'dd/MM/yy HH:mm') : '';
+    const startTime = point ? format(point.dateFrom, 'dd/MM/yy HH:mm') : '';
+    const endTime = point ? format(point.dateTo, 'dd/MM/yy HH:mm') : '';
 
     return `
       <div class="event__field-group  event__field-group--time">
@@ -99,13 +99,13 @@ export const createEventEditTemplate = (point) => {
   };
 
   const createOffersListElement = () => {
-    const availableOffers = point && Offers.find((list) => list.type === point.type);
+    const availableOffers = point && getOffers(point.type);
 
     if (!availableOffers) {
       return '';
     }
 
-    const offersListElement = availableOffers.offers
+    const offersListElement = availableOffers
       .map((offer, index) => {
         const isChecked = point.offers.find((el) => offer.title === el.title);
         return `

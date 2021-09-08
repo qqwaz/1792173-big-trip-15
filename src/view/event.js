@@ -1,12 +1,11 @@
-import * as Utl from '../utils.js';
-import { PointTypes } from '../const.js';
+import { format, intervalToDuration } from 'date-fns';
 
 export const createEventTemplate = (point) => {
-  const startDate = Utl.format(point.dateFrom, 'MMM dd');
-  const startTime = Utl.format(point.dateFrom, 'HH:mm');
-  const endTime = Utl.format(point.dateTo, 'HH:mm');
+  const startDate = format(point.dateFrom, 'MMM dd');
+  const startTime = format(point.dateFrom, 'HH:mm');
+  const endTime = format(point.dateTo, 'HH:mm');
   const duration = () => {
-    const durationObj = Utl.intervalToDuration({
+    const durationObj = intervalToDuration({
       start: new Date(point.dateFrom),
       end: new Date(point.dateTo),
     });
@@ -17,7 +16,7 @@ export const createEventTemplate = (point) => {
     ].join('');
   };
 
-  const icon = PointTypes[point.type].icon;
+  const icon = `img/icons/${point.type}.png`;
   const title = `${point.type} ${point.destination.name}`;
   const price = point.basePrice;
 

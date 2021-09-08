@@ -1,4 +1,4 @@
-import * as Utl from '../utils.js';
+import { format } from 'date-fns';
 
 export const createSummaryTemplate = (points) => {
 
@@ -7,8 +7,8 @@ export const createSummaryTemplate = (points) => {
     ? [cities[0], '...', cities[cities.length - 1]].join(' &mdash; ')
     : cities.join(' &mdash; ');
 
-  const dateFrom = Utl.format(points[0].dateFrom, 'MMM dd');
-  const dateTo = Utl.format(points[points.length - 1].dateTo, 'MMM dd');
+  const dateFrom = format(points[0].dateFrom, 'MMM dd');
+  const dateTo = format(points[points.length - 1].dateTo, 'MMM dd');
   const tripDates = `${dateFrom}&nbsp;&mdash;&nbsp;${dateTo}`;
 
   const tripCost = points
