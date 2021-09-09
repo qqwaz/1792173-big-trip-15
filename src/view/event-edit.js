@@ -1,12 +1,12 @@
-import { PointTypes } from '../const.js';
-import { names as cities } from '../mocks/destinations.const.js';
+import { POINT_TYPES } from '../const.js';
+import { Destinations } from '../mocks/destinations.mock.js';
 import { getOffers } from '../mocks/offers.mock.js';
 import { format } from 'date-fns';
 
 export const createEventEditTemplate = (point) => {
 
   const createTypeElement = () => {
-    const typesListElement = PointTypes
+    const typesListElement = POINT_TYPES
       .map((type) => `
         <div class="event__type-item">
           <input
@@ -44,9 +44,9 @@ export const createEventEditTemplate = (point) => {
   };
 
   const createDestinationElement = () => {
-    const citiesListElement = cities
-      .map((city) => `
-        <option value=${city}>${city}</option>`)
+    const citiesListElement = Destinations
+      .map((item) => `
+        <option value=${item.name}>${item.name}</option>`)
       .join('');
 
     const destination = point ? point.destination.name : '';

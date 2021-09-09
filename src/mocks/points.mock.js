@@ -1,6 +1,6 @@
 import { getDestination } from './destinations.mock.js';
 import { getOffers } from './offers.mock.js';
-import { PointTypes } from '../const.js';
+import { POINT_TYPES } from '../const.js';
 import { getRandomInt, getRandomArrayElement, getShuffledArray } from '../utils.js';
 import { addDays, addMinutes } from 'date-fns';
 
@@ -9,7 +9,7 @@ const MAX_MINUTES_BETWEEN_POINTS = 60;
 const MAX_MINUTES_AT_POINT = 60 * 72;
 
 const generatePoint = (id, previousPoint) => {
-  const type = getRandomArrayElement(PointTypes);
+  const type = getRandomArrayElement(POINT_TYPES);
 
   const previousPointDepartureDate = previousPoint ? previousPoint.dateTo : JOURNEY_START_DATE;
   const dateFrom = addMinutes(previousPointDepartureDate, getRandomInt(MAX_MINUTES_BETWEEN_POINTS));
@@ -23,11 +23,9 @@ const generatePoint = (id, previousPoint) => {
     dateTo,
     destination: getDestination(),
     isFavorite: !getRandomInt(3),
-    offers: getShuffledArray(getOffers(type), getRandomInt(5)),
+    offers: getShuffledArray(getOffers(type), getRandomInt(1, 5)),
   };
 };
 
 export const getPoints = (amount) => new Array(amount).fill()
   .map((_, i, arr) => generatePoint(i, arr[i-1]));
-
-

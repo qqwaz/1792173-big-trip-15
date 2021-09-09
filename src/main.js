@@ -6,9 +6,9 @@ import { createEventsListTemplate } from './view/events-list.js';
 import { createEventEditTemplate } from './view/event-edit.js';
 import { createEventTemplate } from './view/event.js';
 import { getPoints } from './mocks/points.mock.js';
-import * as Utl from './utils.js';
+import { getRandomInt } from './utils.js';
 
-const POINTS_AMOUNT = Utl.getRandomInt(15, 20);
+const POINTS_AMOUNT = getRandomInt(15, 20);
 const points = getPoints(POINTS_AMOUNT);
 
 const render = (container, template, place) => container.insertAdjacentHTML(place, template);

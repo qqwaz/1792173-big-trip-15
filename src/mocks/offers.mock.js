@@ -1,12 +1,15 @@
-import { getRandomInt, getShuffledArray } from '../utils.js';
-import { offers } from './offers.const.js';
-import { PointTypes } from '../const.js';
+import { getRandomInt, getShuffledArray, getRandomArrayElement } from '../utils.js';
+import { OFFRER_TITLES } from './offers.const.js';
+import { POINT_TYPES } from '../const.js';
 
-const availableOffers = PointTypes
+const availableOffers = getShuffledArray(POINT_TYPES)
   .map((type) => ({
     type,
-    offers: getShuffledArray(offers, getRandomInt(10)),
+    offers: new Array(getRandomInt(10)).fill()
+      .map(() => ({
+        title: getRandomArrayElement(OFFRER_TITLES),
+        price: getRandomInt(5, 20) * 10,
+      })),
   }));
 
 export const getOffers = (type) => availableOffers.find((item) => item.type === type).offers;
-
