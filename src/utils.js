@@ -33,12 +33,12 @@ export const getRandomInt = (a, b = 0) => {
 export const getRandomArrayElement = (array) => array[getRandomInt(array.length - 1)];
 
 export const getShuffledArray = (array, length) => {
-  const result = new Array(Math.min(array.length, length || array.length)).fill();
-  result.forEach((x, i) => {
+  const result = array.slice();
+  for (let i = result.length - 1; i > 0; i--) {
     const j = Math.floor(Math.random() * (i + 1));
-    [result[i], array[j]] = [array[j], array[i]];
-  });
-  return result;
+    [result[i], result[j]] = [result[j], result[i]];
+  }
+  return result.slice(0, Math.min(array.length, length || array.length));
 };
 
 export const capitalize = (string) => string.charAt(0).toUpperCase() + string.slice(1);
