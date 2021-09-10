@@ -36,13 +36,13 @@ const renderEvent = (container, event) => {
     replaceEditToView();
   };
 
-  eventViewComponent.getElement().querySelector('.event__rollup-btn').addEventListener('click', () => {
+  eventViewComponent.getElement('.event__rollup-btn').addEventListener('click', () => {
     replaceViewToEdit();
     document.addEventListener('keydown', onEscKeyDown);
     eventEditComponent.getElement('.event__reset-btn').addEventListener('click', onCancelClick);
   });
 
-  eventEditComponent.getElement().querySelector('form').addEventListener('submit', (evt) => {
+  eventEditComponent.getElement('form').addEventListener('submit', (evt) => {
     evt.preventDefault();
     replaceEditToView();
     document.removeEventListener('keydown', onEscKeyDown);

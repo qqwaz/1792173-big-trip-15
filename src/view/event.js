@@ -76,11 +76,13 @@ export default class Event {
     return template(this._point);
   }
 
-  getElement() {
+  getElement(selector) {
     if (!this._element) {
       this._element = createElement(this.getTemplate());
     }
-    return this._element;
+    return selector
+      ? this._element.querySelector(selector)
+      : this._element;
   }
 
   removeElement() {
