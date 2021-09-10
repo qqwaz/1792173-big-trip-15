@@ -1,20 +1,19 @@
-import { format, intervalToDuration } from 'date-fns';
+import { createElement } from '../utils.js';
+import dayjs from 'dayjs';
+import duration from 'dayjs/plugin/duration';
 
-export const createEventTemplate = (point) => {
-  const startDate = format(point.dateFrom, 'MMM dd');
-  const startTime = format(point.dateFrom, 'HH:mm');
-  const endTime = format(point.dateTo, 'HH:mm');
-  const duration = () => {
-    const durationObj = intervalToDuration({
-      start: new Date(point.dateFrom),
-      end: new Date(point.dateTo),
-    });
+const template = (point) => {
+  const startDate = dayjs(point.dateFrom).format('MMM DD');
+  const startTime = dayjs(point.dateFrom).format('HH:mm');
+  const endTime = dayjs(point.dateTo).format('HH:mm');
+  const durationTime = (() => {
+    const diff = dayjs.extend(duration).duration(dayjs(point.dateTo).diff(point.dateFrom));
     return [
-      durationObj.days ? `${durationObj.days.toString().padStart(2, '0')}D ` : '',
-      durationObj.hours ? `${durationObj.hours.toString().padStart(2, '0')}H ` : '',
-      durationObj.minutes ? `${durationObj.minutes.toString().padStart(2, '0')}M ` : '',
-    ].join('');
-  };
+      diff.days() ? diff.format('DD[D]') : '',
+      diff.hours() ? diff.format('HH[H]') : '',
+      diff.minutes() ? diff.format('mm[M]') : '',
+    ].join(' ');
+  })();
 
   const icon = `img/icons/${point.type}.png`;
   const title = `${point.type} ${point.destination.name}`;
@@ -32,8 +31,7 @@ export const createEventTemplate = (point) => {
 
   const isFavorite = point.isFavorite ? 'event__favorite-btn--active': '';
 
-  return `
-    <li class="trip-events__item">
+  return `<li class="trip-events__item">
       <div class="event">
         <time class="event__date" datetime="2019-03-18">${startDate}</time>
         <div class="event__type">
@@ -46,7 +44,7 @@ export const createEventTemplate = (point) => {
             &mdash;
             <time class="event__end-time" datetime="2019-03-18T11:00">${endTime}</time>
           </p>
-          <p class="event__duration">${duration()}</p>
+          <p class="event__duration">${durationTime}</p>
         </div>
         <p class="event__price">
           &euro;&nbsp;<span class="event__price-value">${price}</span>
@@ -68,3 +66,24 @@ export const createEventTemplate = (point) => {
     </li>`;
 };
 
+export default class Event {
+  constructor(point) {
+    this._point = point;
+    this._element = null;
+  }
+
+  getTemplate() {
+    return template(this._point);
+  }
+
+  getElement() {
+    if (!this._element) {
+      this._element = createElement(this.getTemplate());
+    }
+    return this._element;
+  }
+
+  removeElement() {
+    this._element = null;
+  }
+}

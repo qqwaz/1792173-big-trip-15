@@ -1,9 +1,10 @@
 import { POINT_TYPES } from '../const.js';
 import { destinations } from '../mocks/destinations.mock.js';
 import { getOffers } from '../mocks/offers.mock.js';
-import { format } from 'date-fns';
+import { createElement, capitalize } from '../utils.js';
+import dayjs from 'dayjs';
 
-export const createEventEditTemplate = (point) => {
+const template = (point) => {
 
   const createTypeElement = () => {
     const typesListElement = POINT_TYPES
@@ -19,7 +20,7 @@ export const createEventEditTemplate = (point) => {
             class="event__type-label event__type-label--${type}"
             for="event-type-${type}-1"
           >
-            ${type}
+            ${capitalize(type)}
           </label>
         </div>`)
       .join('');
@@ -72,8 +73,8 @@ export const createEventEditTemplate = (point) => {
   };
 
   const createTimeElement = () => {
-    const startTime = point ? format(point.dateFrom, 'dd/MM/yy HH:mm') : '';
-    const endTime = point ? format(point.dateTo, 'dd/MM/yy HH:mm') : '';
+    const startTime = point ? dayjs(point.dateFrom).format('DD/MM/YY HH:mm') : '';
+    const endTime = point ? dayjs(point.dateTo).format('DD/MM/YY HH:mm') : '';
 
     return `
       <div class="event__field-group  event__field-group--time">
@@ -185,3 +186,27 @@ export const createEventEditTemplate = (point) => {
     </form>
   </li>`;
 };
+
+export default class EventEdit {
+  constructor(point) {
+    this._point = point;
+    this._element = null;
+  }
+
+  getTemplate() {
+    return template(this._point);
+  }
+
+  getElement(selector) {
+    if (!this._element) {
+      this._element = createElement(this.getTemplate());
+    }
+    return selector
+      ? this._element.querySelector(selector)
+      : this._element;
+  }
+
+  removeElement() {
+    this._element = null;
+  }
+}
