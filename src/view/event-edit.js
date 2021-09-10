@@ -1,5 +1,5 @@
 import { POINT_TYPES } from '../const.js';
-import { Destinations } from '../mocks/destinations.mock.js';
+import { destinations } from '../mocks/destinations.mock.js';
 import { getOffers } from '../mocks/offers.mock.js';
 import { format } from 'date-fns';
 
@@ -44,7 +44,7 @@ export const createEventEditTemplate = (point) => {
   };
 
   const createDestinationElement = () => {
-    const citiesListElement = Destinations
+    const citiesListElement = destinations
       .map((item) => `
         <option value=${item.name}>${item.name}</option>`)
       .join('');

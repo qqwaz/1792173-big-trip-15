@@ -1,4 +1,4 @@
-export const OFFRER_TITLES = [
+export const OFFER_TITLES = [
   'Upgrade to a business class',
   'Choose the radio station',
   'Choose temperature',

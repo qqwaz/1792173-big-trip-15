@@ -6,7 +6,7 @@ import {
   DESTINATION_PICTURE_DESCRIPTIONS
 } from './destinations.const.js';
 
-export const Destinations = getShuffledArray(DESTINATION_NAMES, getRandomInt(10))
+export const destinations = getShuffledArray(DESTINATION_NAMES, getRandomInt(10))
   .map((name) => ({
     name,
     description: getRandomArrayElement(DESTINATION_DESCRIPTIONS),
@@ -17,4 +17,4 @@ export const Destinations = getShuffledArray(DESTINATION_NAMES, getRandomInt(10)
       })),
   }));
 
-export const getDestination = () => getRandomArrayElement(Destinations);
+export const getDestination = () => getRandomArrayElement(destinations);
