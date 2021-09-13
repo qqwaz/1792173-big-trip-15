@@ -7,7 +7,8 @@ import EventEditView from './view/event-edit.js';
 import EventView from './view/event.js';
 import EmptyView from './view/empty.js';
 import { getPoints } from './mocks/points.mock.js';
-import { render, RenderPosition, getRandomInt } from './utils.js';
+import { render, RenderPosition, getRandomInt, KEY_ESCAPE } from './utils.js';
+import { FilterType } from './const.js';
 
 const POINTS_AMOUNT = getRandomInt(15, 20);
 const points = getPoints(POINTS_AMOUNT);
@@ -25,7 +26,7 @@ const renderEvent = (container, event) => {
   };
 
   const onEscKeyDown = (evt) => {
-    if (evt.key === 'Escape' || evt.key === 'Esc') {
+    if (evt.key === KEY_ESCAPE) {
       evt.preventDefault();
       replaceEditToView();
       document.removeEventListener('keydown', onEscKeyDown);
@@ -61,7 +62,7 @@ render(filtersContainerElement, new FiltersView().getElement(), RenderPosition.B
 const contentContainerElement = document.querySelector('.trip-events');
 
 if (points.length === 0 ) {
-  render(contentContainerElement, new EmptyView('Everything').getElement(), RenderPosition.BEFOREEND);
+  render(contentContainerElement, new EmptyView(FilterType.EVERYTHING).getElement(), RenderPosition.BEFOREEND);
 } else {
   render(headerContainerElement, new SummaryView(points).getElement(), RenderPosition.AFTERBEGIN);
 

@@ -3,6 +3,8 @@ export const RenderPosition = {
   BEFOREEND: 'beforeend',
 };
 
+export const KEY_ESCAPE = 'Escape';
+
 export const render = (container, element, place) => {
   switch (place) {
     case RenderPosition.AFTERBEGIN:

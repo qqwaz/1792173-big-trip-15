@@ -1,12 +1,15 @@
 import { createElement } from '../utils.js';
+import { FilterType } from '../const.js';
 
-const template = (filter) => {
-  switch (filter) {
-    case 'Everything': return '<p class="trip-events__msg">Click New Event to create your first point</p>';
-    case 'Past': return '<p class="trip-events__msg">There are no past events now</p>';
-    case 'Future': return '<p class="trip-events__msg">There are no future events now</p>';
-  }
+const EmptyMessage = {
+  [FilterType.EVERYTHING]: 'Click New Event to create your first point',
+  [FilterType.PAST]: 'There are no past events now',
+  [FilterType.FUTURE]: 'There are no future events now',
 };
+
+const template = (filter) => `<p class="trip-events__msg">
+    ${EmptyMessage[filter]}
+  </p>`;
 
 export default class Empty {
   constructor(filter) {
