@@ -1,33 +1,75 @@
-import { createMenuTemplate } from './view/menu.js';
-import { createSummaryTemplate } from './view/summary.js';
-import { createFiltersTemplate } from './view/filters.js';
-import { createSortingTemplate } from './view/sorting.js';
-import { createEventsListTemplate } from './view/events-list.js';
-import { createEventEditTemplate } from './view/event-edit.js';
-import { createEventTemplate } from './view/event.js';
+import MenuView from './view/menu.js';
+import SummaryView from './view/summary.js';
+import FiltersView from './view/filters.js';
+import SortingView from './view/sorting.js';
+import EventsListView from './view/events-list.js';
+import EventEditView from './view/event-edit.js';
+import EventView from './view/event.js';
+import EmptyView from './view/empty.js';
 import { getPoints } from './mocks/points.mock.js';
-import { getRandomInt } from './utils.js';
+import { render, RenderPosition, getRandomInt, KEY_ESCAPE } from './utils.js';
+import { FilterType } from './const.js';
 
 const POINTS_AMOUNT = getRandomInt(15, 20);
 const points = getPoints(POINTS_AMOUNT);
 
-const render = (container, template, place) => container.insertAdjacentHTML(place, template);
+const renderEvent = (container, event) => {
+  const eventViewComponent = new EventView(event);
+  const eventEditComponent = new EventEditView(event);
+
+  const replaceViewToEdit = () => {
+    container.replaceChild(eventEditComponent.getElement(), eventViewComponent.getElement());
+  };
+
+  const replaceEditToView = () => {
+    container.replaceChild(eventViewComponent.getElement(), eventEditComponent.getElement());
+  };
+
+  const onEscKeyDown = (evt) => {
+    if (evt.key === KEY_ESCAPE) {
+      evt.preventDefault();
+      replaceEditToView();
+      document.removeEventListener('keydown', onEscKeyDown);
+    }
+  };
+
+  const onCancelClick = () => {
+    replaceEditToView();
+  };
+
+  eventViewComponent.getElement('.event__rollup-btn').addEventListener('click', () => {
+    replaceViewToEdit();
+    document.addEventListener('keydown', onEscKeyDown);
+    eventEditComponent.getElement('.event__reset-btn').addEventListener('click', onCancelClick);
+  });
+
+  eventEditComponent.getElement('form').addEventListener('submit', (evt) => {
+    evt.preventDefault();
+    replaceEditToView();
+    document.removeEventListener('keydown', onEscKeyDown);
+  });
+
+  render(container, eventViewComponent.getElement(), RenderPosition.BEFOREEND);
+};
 
 const headerContainerElement = document.querySelector('.trip-main');
 const menuContainerElement = headerContainerElement.querySelector('.trip-controls__navigation');
 const filtersContainerElement = headerContainerElement.querySelector('.trip-controls__filters');
 
-render(headerContainerElement, createSummaryTemplate(points), 'afterbegin');
-render(menuContainerElement, createMenuTemplate(), 'beforeend');
-render(filtersContainerElement, createFiltersTemplate(), 'beforeend');
+render(menuContainerElement, new MenuView().getElement(), RenderPosition.BEFOREEND);
+render(filtersContainerElement, new FiltersView().getElement(), RenderPosition.BEFOREEND);
 
 const contentContainerElement = document.querySelector('.trip-events');
-render(contentContainerElement, createSortingTemplate(), 'beforeend');
-render(contentContainerElement, createEventsListTemplate(), 'beforeend');
 
-const eventsContainerElement = contentContainerElement.querySelector('.trip-events__list');
-render(eventsContainerElement, createEventEditTemplate(points[0]), 'beforeend');
+if (points.length === 0 ) {
+  render(contentContainerElement, new EmptyView(FilterType.EVERYTHING).getElement(), RenderPosition.BEFOREEND);
+} else {
+  render(headerContainerElement, new SummaryView(points).getElement(), RenderPosition.AFTERBEGIN);
 
-for (let i = 1; i < POINTS_AMOUNT; i++) {
-  render(eventsContainerElement, createEventTemplate(points[i]), 'beforeend');
+  render(contentContainerElement, new SortingView().getElement(), RenderPosition.BEFOREEND);
+  render(contentContainerElement, new EventsListView().getElement(), RenderPosition.BEFOREEND);
+
+  const eventsContainerElement = contentContainerElement.querySelector('.trip-events__list');
+  points.forEach((point) => renderEvent(eventsContainerElement, point));
 }
+
