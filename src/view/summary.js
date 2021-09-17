@@ -1,5 +1,5 @@
-import { createElement } from '../utils.js';
-import dayjs from 'dayjs';
+import AbstractView from './abstract.js';
+import { formatDate } from '../utils/date.js';
 
 const template = (points) => {
   const cities = points.map((x) => x.destination.name);
@@ -7,8 +7,8 @@ const template = (points) => {
     ? [cities[0], '...', cities[cities.length - 1]].join(' &mdash; ')
     : cities.join(' &mdash; ');
 
-  const dateFrom = dayjs(points[0].dateFrom).format('MMM DD');
-  const dateTo = dayjs(points[points.length - 1].dateTo).format('MMM DD');
+  const dateFrom = formatDate(points[0].dateFrom, 'MMM DD');
+  const dateTo = formatDate(points[points.length - 1].dateTo, 'MMM DD');
   const tripDates = `${dateFrom}&nbsp;&mdash;&nbsp;${dateTo}`;
 
   const tripCost = points
@@ -30,25 +30,13 @@ const template = (points) => {
   </section>`;
 };
 
-export default class Summary {
+export default class Summary extends AbstractView {
   constructor(points) {
+    super();
     this._points = points;
-    this._element = null;
   }
 
   getTemplate() {
     return template(this._points);
-  }
-
-  getElement () {
-    if(!this._element) {
-      this._element = createElement(this.getTemplate());
-    }
-
-    return this._element;
-  }
-
-  removeElement () {
-    this._element = null;
   }
 }

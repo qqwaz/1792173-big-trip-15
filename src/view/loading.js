@@ -1,11 +1,12 @@
 import AbstractView from './abstract.js';
 
 const template = () => (
-  `<ul class="trip-events__list">
-  </ul>`
+  `<p class="trip-events__msg">
+    Loading...
+  </p>`
 );
 
-export default class EventsList extends AbstractView {
+export default class Loading extends AbstractView {
   getTemplate() {
     return template();
   }

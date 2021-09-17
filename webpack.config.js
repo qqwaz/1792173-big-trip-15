@@ -11,5 +11,13 @@ module.exports = {
     contentBase: path.resolve(__dirname, 'public'),
     watchContentBase: true,
     port: 8070,
-  }
+  },
+  module: {
+    rules: [
+      {
+          test: /\.css$/i,
+          use: ['style-loader', 'css-loader']
+      }
+    ],
+  },
 };

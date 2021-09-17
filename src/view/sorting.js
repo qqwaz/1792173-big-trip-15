@@ -1,10 +1,11 @@
-import { createElement } from '../utils.js';
+import AbstractView from './abstract.js';
+import { SortingType } from '../const.js';
 
-const template = () => (
+const template = (sorting) => (
   `<form class="trip-events__trip-sort  trip-sort" action="#" method="get">
   <div class="trip-sort__item  trip-sort__item--day">
-    <input id="sort-day" class="trip-sort__input  visually-hidden" type="radio" name="trip-sort" value="sort-day" checked>
-    <label class="trip-sort__btn" for="sort-day">Day</label>
+    <input id="sort-day" class="trip-sort__input  visually-hidden" type="radio" name="trip-sort" value="sort-day" ${sorting === SortingType.DAY ? 'checked' : ''}>
+    <label class="trip-sort__btn" for="sort-day" data-sorting-type="${SortingType.DAY}">Day</label>
   </div>
 
   <div class="trip-sort__item  trip-sort__item--event">
@@ -13,13 +14,13 @@ const template = () => (
   </div>
 
   <div class="trip-sort__item  trip-sort__item--time">
-    <input id="sort-time" class="trip-sort__input  visually-hidden" type="radio" name="trip-sort" value="sort-time">
-    <label class="trip-sort__btn" for="sort-time">Time</label>
+    <input id="sort-time" class="trip-sort__input  visually-hidden" type="radio" name="trip-sort" value="sort-time" ${sorting === SortingType.TIME ? 'checked' : ''}>
+    <label class="trip-sort__btn" for="sort-time" data-sorting-type="${SortingType.TIME}">Time</label>
   </div>
 
   <div class="trip-sort__item  trip-sort__item--price">
-    <input id="sort-price" class="trip-sort__input  visually-hidden" type="radio" name="trip-sort" value="sort-price">
-    <label class="trip-sort__btn" for="sort-price">Price</label>
+    <input id="sort-price" class="trip-sort__input  visually-hidden" type="radio" name="trip-sort" value="sort-price" ${sorting === SortingType.PRICE ? 'checked' : ''}>
+    <label class="trip-sort__btn" for="sort-price" data-sorting-type="${SortingType.PRICE}">Price</label>
   </div>
 
   <div class="trip-sort__item  trip-sort__item--offer">
@@ -29,24 +30,27 @@ const template = () => (
 </form>`
 );
 
-export default class Sorting {
-  constructor() {
-    this._element = null;
+export default class Sorting extends AbstractView {
+  constructor(sorting) {
+    super();
+    this._sorting = sorting;
+    this._sortingChangeHandler = this._sortingChangeHandler.bind(this);
   }
 
   getTemplate() {
-    return template();
+    return template(this._sorting);
   }
 
-  getElement() {
-    if (!this._element) {
-      this._element = createElement(this.getTemplate());
+  _sortingChangeHandler(evt) {
+    if (!evt.target.classList.contains('trip-sort__btn')) {
+      return;
     }
-
-    return this._element;
+    this._callback.sortingChange(evt.target.dataset.sortingType);
   }
 
-  removeElement() {
-    this._element = null;
+  setSortingChangeHandler(callback) {
+    this._callback.sortingChange = callback;
+    this.getElement().addEventListener('click', this._sortingChangeHandler);
   }
+
 }

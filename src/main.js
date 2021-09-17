@@ -1,75 +1,86 @@
 import MenuView from './view/menu.js';
-import SummaryView from './view/summary.js';
-import FiltersView from './view/filters.js';
-import SortingView from './view/sorting.js';
-import EventsListView from './view/events-list.js';
-import EventEditView from './view/event-edit.js';
-import EventView from './view/event.js';
-import EmptyView from './view/empty.js';
-import { getPoints } from './mocks/points.mock.js';
-import { render, RenderPosition, getRandomInt, KEY_ESCAPE } from './utils.js';
-import { FilterType } from './const.js';
+import StatsView from './view/stats.js';
+import FilterPresenter from './presenter/filter.js';
+import TripPresenter from './presenter/trip.js';
+import SummaryPresenter from './presenter/summary.js';
+import PointsModel from './model/points.js';
+import FilterModel from './model/filter.js';
+import OffersModel from './model/offers.js';
+import DestinationsModel from './model/destinations.js';
+import { render, RenderPosition, remove } from './utils/render.js';
+import { MenuItem, UpdateType } from './const.js';
+import Api from './api.js';
 
-const POINTS_AMOUNT = getRandomInt(15, 20);
-const points = getPoints(POINTS_AMOUNT);
+const AUTHORIZATION = 'Basic hS2sfS44wcl1sa2j';
+const END_POINT = 'https://15.ecmascript.pages.academy/big-trip';
+const api = new Api(END_POINT, AUTHORIZATION);
 
-const renderEvent = (container, event) => {
-  const eventViewComponent = new EventView(event);
-  const eventEditComponent = new EventEditView(event);
-
-  const replaceViewToEdit = () => {
-    container.replaceChild(eventEditComponent.getElement(), eventViewComponent.getElement());
-  };
-
-  const replaceEditToView = () => {
-    container.replaceChild(eventViewComponent.getElement(), eventEditComponent.getElement());
-  };
-
-  const onEscKeyDown = (evt) => {
-    if (evt.key === KEY_ESCAPE) {
-      evt.preventDefault();
-      replaceEditToView();
-      document.removeEventListener('keydown', onEscKeyDown);
-    }
-  };
-
-  const onCancelClick = () => {
-    replaceEditToView();
-  };
-
-  eventViewComponent.getElement('.event__rollup-btn').addEventListener('click', () => {
-    replaceViewToEdit();
-    document.addEventListener('keydown', onEscKeyDown);
-    eventEditComponent.getElement('.event__reset-btn').addEventListener('click', onCancelClick);
-  });
-
-  eventEditComponent.getElement('form').addEventListener('submit', (evt) => {
-    evt.preventDefault();
-    replaceEditToView();
-    document.removeEventListener('keydown', onEscKeyDown);
-  });
-
-  render(container, eventViewComponent.getElement(), RenderPosition.BEFOREEND);
-};
-
+let statsComponent = null;
+const statsContainerElement = document.querySelector('.page-body__container');
 const headerContainerElement = document.querySelector('.trip-main');
 const menuContainerElement = headerContainerElement.querySelector('.trip-controls__navigation');
 const filtersContainerElement = headerContainerElement.querySelector('.trip-controls__filters');
-
-render(menuContainerElement, new MenuView().getElement(), RenderPosition.BEFOREEND);
-render(filtersContainerElement, new FiltersView().getElement(), RenderPosition.BEFOREEND);
-
 const contentContainerElement = document.querySelector('.trip-events');
+const newPointButtonElement = document.querySelector('.trip-main__event-add-btn');
+const menuComponent = new MenuView();
 
-if (points.length === 0 ) {
-  render(contentContainerElement, new EmptyView(FilterType.EVERYTHING).getElement(), RenderPosition.BEFOREEND);
-} else {
-  render(headerContainerElement, new SummaryView(points).getElement(), RenderPosition.AFTERBEGIN);
+const pointsModel = new PointsModel();
+const filterModel = new FilterModel();
+const offersModel = new OffersModel();
+const destinationsModel = new DestinationsModel();
 
-  render(contentContainerElement, new SortingView().getElement(), RenderPosition.BEFOREEND);
-  render(contentContainerElement, new EventsListView().getElement(), RenderPosition.BEFOREEND);
+const filterPresenter = new FilterPresenter(filtersContainerElement, filterModel, pointsModel);
+filterPresenter.init();
 
-  const eventsContainerElement = contentContainerElement.querySelector('.trip-events__list');
-  points.forEach((point) => renderEvent(eventsContainerElement, point));
-}
+const tripPresenter = new TripPresenter(contentContainerElement, pointsModel, filterModel, offersModel, destinationsModel, api);
+tripPresenter.init();
+
+const summaryPresenter = new SummaryPresenter(headerContainerElement, pointsModel);
+summaryPresenter.init();
+
+const PointNewFormCloseHandler = () => {
+  newPointButtonElement.disabled = false;
+  menuComponent.setMenuItem(MenuItem.TASKS);
+};
+newPointButtonElement.addEventListener('click', (evt) => {
+  evt.preventDefault();
+  tripPresenter.createPoint(PointNewFormCloseHandler);
+  newPointButtonElement.disabled = true;
+});
+
+const menuClickHandler = (menuItem) => {
+  switch (menuItem) {
+    case MenuItem.TABLE:
+      filterPresenter.enableFilters();
+      remove(statsComponent);
+      tripPresenter.init();
+      newPointButtonElement.disabled = false;
+      break;
+    case MenuItem.STATS:
+      filterPresenter.disableFilters();
+      statsComponent = new StatsView(pointsModel.getPoints());
+      render(statsContainerElement, statsComponent, RenderPosition.BEFOREEND);
+      tripPresenter.destroy();
+      newPointButtonElement.disabled = true;
+      break;
+  }
+};
+
+Promise.all([
+  api.getDestinations(),
+  api.getOffers(),
+  api.getPoints(),
+])
+  .then((data) => {
+    destinationsModel.setDestinations(data[0]);
+    offersModel.setOffers(data[1]);
+    pointsModel.setPoints(UpdateType.INIT, data[2]);
+    render(menuContainerElement, menuComponent, RenderPosition.BEFOREEND);
+    menuComponent.setMenuClickHandler(menuClickHandler);
+  })
+  .catch(() => {
+    pointsModel.setPoints(UpdateType.INIT, []);
+    render(menuContainerElement, menuComponent, RenderPosition.BEFOREEND);
+    menuComponent.setMenuClickHandler(menuClickHandler);
+  });
 
