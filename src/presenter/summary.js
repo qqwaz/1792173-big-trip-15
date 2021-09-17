@@ -27,9 +27,7 @@ export default class Summary {
   }
 
   _removeSummary() {
-    if (this._summaryComponent !== null) {
-      remove(this._summaryComponent);
-    }
+    remove(this._summaryComponent);
   }
 
   _modelEventHandler() {

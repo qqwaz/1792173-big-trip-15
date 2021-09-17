@@ -151,7 +151,7 @@ export default class Point {
   _favoriteClickHandler() {
     this._dataChange(
       UserAction.UPDATE,
-      UpdateType.PATCH,
+      UpdateType.MINOR,
       Object.assign(
         {},
         this._point,
