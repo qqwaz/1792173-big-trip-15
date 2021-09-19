@@ -10,11 +10,17 @@ import DestinationsModel from './model/destinations.js';
 import { render, RenderPosition, remove } from './utils/render.js';
 import { MenuItem, UpdateType } from './const.js';
 import { getRandomString } from './utils/common.js';
-import Api from './api.js';
+import Api from './api/api.js';
+import { isOnline } from './utils/common.js';
+import { toast } from './utils/toast.js';
+import Store from './api/store.js';
+import Provider from './api/provider.js';
 
 const AUTHORIZATION = `Basic ${getRandomString()}`;
 const END_POINT = 'https://15.ecmascript.pages.academy/big-trip';
-const api = new Api(END_POINT, AUTHORIZATION);
+const STORE_PREFIX = 'bigtrip-localstorage';
+const STORE_VER = 'v15';
+const STORE_NAME = `${STORE_PREFIX}-${STORE_VER}`;
 
 let statsComponent = null;
 const statsContainerElement = document.querySelector('.page-body__container');
@@ -25,6 +31,10 @@ const contentContainerElement = document.querySelector('.trip-events');
 const newPointButtonElement = document.querySelector('.trip-main__event-add-btn');
 const menuComponent = new MenuView();
 
+const api = new Api(END_POINT, AUTHORIZATION);
+const store = new Store(STORE_NAME, window.localStorage);
+const apiWithProvider = new Provider(api, store);
+
 const pointsModel = new PointsModel();
 const filterModel = new FilterModel();
 const offersModel = new OffersModel();
@@ -33,7 +43,7 @@ const destinationsModel = new DestinationsModel();
 const filterPresenter = new FilterPresenter(filtersContainerElement, filterModel, pointsModel);
 filterPresenter.init();
 
-const tripPresenter = new TripPresenter(contentContainerElement, pointsModel, filterModel, offersModel, destinationsModel, api);
+const tripPresenter = new TripPresenter(contentContainerElement, pointsModel, filterModel, offersModel, destinationsModel, apiWithProvider);
 tripPresenter.init();
 
 const summaryPresenter = new SummaryPresenter(headerContainerElement, pointsModel);
@@ -45,6 +55,9 @@ const PointNewFormCloseHandler = () => {
 };
 newPointButtonElement.addEventListener('click', (evt) => {
   evt.preventDefault();
+  if (!isOnline()) {
+    toast('You can\'t create new task offline');
+  }
   tripPresenter.createPoint(PointNewFormCloseHandler);
   newPointButtonElement.disabled = true;
 });
@@ -68,9 +81,9 @@ const menuClickHandler = (menuItem) => {
 };
 
 Promise.all([
-  api.getDestinations(),
-  api.getOffers(),
-  api.getPoints(),
+  apiWithProvider.getDestinations(),
+  apiWithProvider.getOffers(),
+  apiWithProvider.getPoints(),
 ])
   .then((data) => {
     destinationsModel.setDestinations(data[0]);
@@ -85,3 +98,15 @@ Promise.all([
     menuComponent.setMenuClickHandler(menuClickHandler);
   });
 
+window.addEventListener('load', () => {
+  navigator.serviceWorker.register('/sw.js');
+});
+
+window.addEventListener('online', () => {
+  document.title = document.title.replace(' [offline]', '');
+  apiWithProvider.sync();
+});
+
+window.addEventListener('offline', () => {
+  document.title += ' [offline]';
+});
