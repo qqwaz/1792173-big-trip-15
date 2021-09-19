@@ -1,5 +1,5 @@
-import PointsModel from '../model/tasks.js';
-import {isOnline} from '../utils/common.js';
+import PointsModel from '../model/points.js';
+import { isOnline } from '../utils/common.js';
 
 const getSyncedPoints = (items) =>
   items

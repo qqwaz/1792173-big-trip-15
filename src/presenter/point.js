@@ -154,7 +154,6 @@ export default class Point {
       toast('You can\'t edit point offline');
       return;
     }
-
     this._replaceViewToEdit();
   }
 
