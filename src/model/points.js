@@ -19,7 +19,7 @@ export default class Points extends AbstractObserver {
     const index = this._points.findIndex((point) => point.id === update.id);
 
     if (index === -1) {
-      throw new Error('Can\'t update unexisting task');
+      throw new Error('Can\'t update unexisting point');
     }
 
     this._points = [
@@ -44,7 +44,7 @@ export default class Points extends AbstractObserver {
     const index = this._points.findIndex((point) => point.id === update.id);
 
     if (index === -1) {
-      throw new Error('Can\'t delete unexisting task');
+      throw new Error('Can\'t delete unexisting point');
     }
 
     this._points = [
@@ -67,10 +67,12 @@ export default class Points extends AbstractObserver {
         basePrice: point['base_price'],
       },
     );
+
     delete adaptedPoint['date_from'];
     delete adaptedPoint['date_to'];
     delete adaptedPoint['is_favorite'];
     delete adaptedPoint['base_price'];
+
     return adaptedPoint;
   }
 
@@ -85,10 +87,12 @@ export default class Points extends AbstractObserver {
         'base_price': point.basePrice,
       },
     );
+
     delete adaptedPoint.dateFrom;
     delete adaptedPoint.dateTo;
     delete adaptedPoint.isFavorite;
     delete adaptedPoint.basePrice;
+
     return adaptedPoint;
   }
 }

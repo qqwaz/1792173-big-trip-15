@@ -90,11 +90,15 @@ const template = (data, destinations) => {
     `<div class="event__field-group  event__field-group--time">
       <label class="visually-hidden" for="event-start-time-1">From</label>
       <input class="event__input  event__input--time" id="event-start-time-1" type="text" name="event-start-time"
-        value="${formatDateFull(dateFrom)}" ${isDisabled ? 'disabled' : ''}>
+        value="${formatDateFull(dateFrom)}"
+        ${isDisabled ? 'disabled' : ''}
+        required>
       &mdash;
       <label class="visually-hidden" for="event-end-time-1">To</label>
       <input class="event__input  event__input--time" id="event-end-time-1" type="text" name="event-end-time"
-         value="${formatDateFull(dateTo)}" ${isDisabled ? 'disabled' : ''}>
+        value="${formatDateFull(dateTo)}"
+        ${isDisabled ? 'disabled' : ''}
+        required>
     </div>`
   );
 
@@ -178,24 +182,15 @@ const template = (data, destinations) => {
   return `<li class="trip-events__item">
     <form class="event event--edit" action="#" method="post">
       <header class="event__header">
-
         ${createTypeElement()}
-
         ${createDestinationElement()}
-
         ${createTimeElement()}
-
         ${createPriceElement()}
-
         ${createActionsElement()}
       </header>
-
       <section class="event__details">
-
         ${createOffersListElement()}
-
         ${createDestinationDetailsElement()}
-
       </section>
     </form>
   </li>`;
@@ -313,6 +308,7 @@ export default class PointEdit extends SmartView {
           ['time_24hr']: true,
           dateFormat: 'd/m/y H:i',
           defaultDate: this._data.dateTo,
+          minDate: this._data.dateFrom,
           onClose: this._dateToPickerChangeHandler,
         },
       );
@@ -344,6 +340,12 @@ export default class PointEdit extends SmartView {
 
   _destinationInputChangeHandler(evt) {
     const destination = this._destinations.find((item) => item.name === evt.target.value);
+    if (!destination) {
+      this.updateData({
+        hasDestination: false,
+      });
+      return;
+    }
     this.updateData({
       destination: {
         name: destination.name,
@@ -355,8 +357,10 @@ export default class PointEdit extends SmartView {
   }
 
   _dateFromPickerChangeHandler([userDate]) {
+    this._dateToPicker.set('minDate', userDate.toISOString());
     this.updateData({
       dateFrom: userDate.toISOString(),
+      dateTo: this._data.dateTo < this._data.dateFrom ? this._data.dateFrom : this._data.dateTo,
     }, true);
   }
 

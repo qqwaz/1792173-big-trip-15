@@ -5,7 +5,7 @@ const template = () => (
   </ul>`
 );
 
-export default class EventsList extends AbstractView {
+export default class PointsList extends AbstractView {
   getTemplate() {
     return template();
   }

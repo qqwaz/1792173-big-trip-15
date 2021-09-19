@@ -12,6 +12,10 @@ export const formatDate = (date, format) =>
 
 export const formatDateFull = (date) => formatDate(date, 'DD/MM/YY HH:mm');
 
+export const formatDateShort = (date) => formatDate(date, 'MMM DD');
+
+export const formatTime = (date) => formatDate(date, 'HH:mm');
+
 export const formatDuration = (time) => {
   if (time === 0) {
     return '0M';

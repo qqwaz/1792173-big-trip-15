@@ -1,10 +1,12 @@
 import FilterView from '../view/filter.js';
 import { render, RenderPosition, replace, remove } from '../utils/render.js';
 import { FilterType, UpdateType } from '../const.js';
+import { PointFilter } from '../utils/point.js';
 
 export default class Filter {
   constructor(container, filterModel, pointsModel) {
     this._container = container;
+
     this._filterModel = filterModel;
     this._pointsModel = pointsModel;
 
@@ -46,10 +48,17 @@ export default class Filter {
   }
 
   _getFilters() {
+    const points = this._pointsModel.getPoints();
+
+    const getFilter = (filter) => ({
+      name: filter,
+      disabled: PointFilter[filter](points).length === 0,
+    });
+
     return [
-      FilterType.EVERYTHING,
-      FilterType.FUTURE,
-      FilterType.PAST];
+      getFilter(FilterType.EVERYTHING),
+      getFilter(FilterType.FUTURE),
+      getFilter(FilterType.PAST)];
   }
 
   enableFilters() {

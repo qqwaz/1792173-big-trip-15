@@ -9,9 +9,10 @@ import OffersModel from './model/offers.js';
 import DestinationsModel from './model/destinations.js';
 import { render, RenderPosition, remove } from './utils/render.js';
 import { MenuItem, UpdateType } from './const.js';
+import { getRandomString } from './utils/common.js';
 import Api from './api.js';
 
-const AUTHORIZATION = 'Basic hS2sfS44wcl1sa2j';
+const AUTHORIZATION = `Basic ${getRandomString()}`;
 const END_POINT = 'https://15.ecmascript.pages.academy/big-trip';
 const api = new Api(END_POINT, AUTHORIZATION);
 
@@ -40,7 +41,7 @@ summaryPresenter.init();
 
 const PointNewFormCloseHandler = () => {
   newPointButtonElement.disabled = false;
-  menuComponent.setMenuItem(MenuItem.TASKS);
+  menuComponent.setMenuItem(MenuItem.TABLE);
 };
 newPointButtonElement.addEventListener('click', (evt) => {
   evt.preventDefault();

@@ -54,13 +54,16 @@ export default class Point {
       render(this._container, this._pointComponent, RenderPosition.BEFOREEND);
       return;
     }
+
     if (this._mode === Mode.DEFAULT) {
       replace(this._pointComponent, prevPoint);
     }
+
     if (this._mode === Mode.EDITING) {
       replace(this._pointComponent, prevEditPoint);
       this._mode = Mode.DEFAULT;
     }
+
     remove(prevPoint);
     remove(prevEditPoint);
   }

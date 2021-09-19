@@ -39,11 +39,7 @@ export const BLANK_POINT = {
   basePrice: 0,
   dateFrom: new Date().toISOString(),
   dateTo: new Date().toISOString(),
-  destination: {
-    name: '',
-    description: '',
-    pictures: [],
-  },
+  destination: null,
   isFavorite: false,
   offers: [],
 };

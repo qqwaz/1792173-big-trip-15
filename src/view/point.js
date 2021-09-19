@@ -1,10 +1,10 @@
 import AbstractView from './abstract.js';
-import { formatDate, formatPeriod } from '../utils/date.js';
+import { formatDateShort, formatTime, formatPeriod } from '../utils/date.js';
 
 const template = (point) => {
-  const startDate = formatDate(point.dateFrom, 'MMM DD');
-  const startTime = formatDate(point.dateFrom, 'HH:mm');
-  const endTime = formatDate(point.dateTo, 'HH:mm');
+  const startDate = formatDateShort(point.dateFrom);
+  const startTime = formatTime(point.dateFrom);
+  const endTime = formatTime(point.dateTo);
   const duration = formatPeriod(point.dateFrom, point.dateTo);
 
   const icon = `img/icons/${point.type}.png`;
@@ -62,9 +62,9 @@ export default class Point extends AbstractView {
   constructor(point) {
     super();
     this._point = point;
+
     this._editClickHandler = this._editClickHandler.bind(this);
     this._favoriteClickHandler = this._favoriteClickHandler.bind(this);
-
   }
 
   getTemplate() {
@@ -90,6 +90,4 @@ export default class Point extends AbstractView {
     evt.preventDefault();
     this._callback.favoriteClick();
   }
-
-
 }

@@ -25,9 +25,12 @@ export default class Menu extends AbstractView {
     if (!menuItem || menuItem === this._activeItem) {
       return;
     }
+
     this._activeItem = menuItem;
+
     this.getElement('.trip-tabs__btn--active').classList.remove('trip-tabs__btn--active');
     evt.target.classList.add('trip-tabs__btn--active');
+
     this._callback.menuClick(this._activeItem);
   }
 

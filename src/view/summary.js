@@ -1,5 +1,5 @@
 import AbstractView from './abstract.js';
-import { formatDate } from '../utils/date.js';
+import { formatDateShort } from '../utils/date.js';
 
 const template = (points) => {
   const cities = points.map((x) => x.destination.name);
@@ -7,8 +7,8 @@ const template = (points) => {
     ? [cities[0], '...', cities[cities.length - 1]].join(' &mdash; ')
     : cities.join(' &mdash; ');
 
-  const dateFrom = formatDate(points[0].dateFrom, 'MMM DD');
-  const dateTo = formatDate(points[points.length - 1].dateTo, 'MMM DD');
+  const dateFrom = formatDateShort(points[0].dateFrom);
+  const dateTo = formatDateShort(points[points.length - 1].dateTo);
   const tripDates = `${dateFrom}&nbsp;&mdash;&nbsp;${dateTo}`;
 
   const tripCost = points

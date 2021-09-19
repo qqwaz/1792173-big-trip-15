@@ -5,7 +5,9 @@ export default class Summary {
   constructor(container, pointsModel) {
     this._container = container;
     this._pointsModel = pointsModel;
+
     this._summaryComponent = null;
+
     this._modelEventHandler = this._modelEventHandler.bind(this);
     this._pointsModel.addObserver(this._modelEventHandler);
   }

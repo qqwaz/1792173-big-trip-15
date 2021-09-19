@@ -21,6 +21,7 @@ export default class PointNew {
     if (this._pointEditComponent !== null) {
       return;
     }
+
     this._offersModel = offersModel;
     this._destinationsModel = destinationsModel;
     this._destroyCallback = callback;
@@ -46,9 +47,11 @@ export default class PointNew {
     if (this._pointEditComponent === null) {
       return;
     }
+
     if (this._destroyCallback !== null) {
       this._destroyCallback();
     }
+
     remove(this._pointEditComponent);
     this._pointEditComponent = null;
     document.removeEventListener('keydown', this._escKeyDownHandler);
@@ -69,6 +72,7 @@ export default class PointNew {
         isDeleting: false,
       });
     };
+
     this._pointEditComponent.shake(resetFormState);
   }
 
