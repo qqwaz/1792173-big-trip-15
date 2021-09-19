@@ -56,7 +56,7 @@ const PointNewFormCloseHandler = () => {
 newPointButtonElement.addEventListener('click', (evt) => {
   evt.preventDefault();
   if (!isOnline()) {
-    toast('You can\'t create new pont offline');
+    toast('You can\'t create new point offline');
   }
   tripPresenter.createPoint(PointNewFormCloseHandler);
   newPointButtonElement.disabled = true;

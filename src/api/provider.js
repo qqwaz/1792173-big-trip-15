@@ -12,7 +12,6 @@ const createStoreStructure = (items) =>
       [current.id]: current,
     }), {});
 
-
 export default class Provider {
   constructor(api, store) {
     this._api = api;
@@ -43,7 +42,7 @@ export default class Provider {
         });
     }
 
-    this._store.setItem(point.id, PointsModel.adaptToServer(Object.assign({}, point)));
+    this._store.setItem(point.id, PointsModel.adaptToServer(point));
 
     return Promise.resolve(point);
   }
@@ -57,7 +56,7 @@ export default class Provider {
         });
     }
 
-    return Promise.reject(new Error('Add pont failed'));
+    return Promise.reject(new Error('Add point failed'));
   }
 
   deletePoint(point) {
