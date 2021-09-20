@@ -2,6 +2,7 @@ import SmartView from './smart.js';
 import Chart from 'chart.js';
 import ChartDataLabels from 'chartjs-plugin-datalabels';
 import { calcMoney, formatMoney, calcType, formatType, calcTime, formatTime } from '../utils/stats.js';
+import { STAT_TYPES } from '../const.js';
 
 const BAR_HEIGHT = 30;
 const calcChartHeigth = (bars) => BAR_HEIGHT * bars;
@@ -83,26 +84,23 @@ const renderTypeChart = (ctx, data) => {
 
 const renderTimeChart = (ctx, data) => {
   ctx.height = calcChartHeigth(data.size);
-  return new Chart(ctx, getConfiguration([...data.keys()], [...data.values()], formatTime, 'TIME'));
+  return new Chart(ctx, getConfiguration([...data.keys()], [...data.values()], formatTime, 'TIME-SPEND'));
 };
 
-const template = () => (
-  `<section class="statistics">
-    <h2 class="visually-hidden">Trip statistics</h2>
-
+const template = () => {
+  const statListElement = STAT_TYPES.map(((type) => `
     <div class="statistics__item">
-      <canvas class="statistics__chart" id="money" width="900"></canvas>
-    </div>
+      <canvas class="statistics__chart" id="${type}" width="900"></canvas>
+    </div>`
+  ))
+    .join('');
 
-    <div class="statistics__item">
-      <canvas class="statistics__chart" id="type" width="900"></canvas>
-    </div>
-
-    <div class="statistics__item">
-      <canvas class="statistics__chart" id="time-spend" width="900"></canvas>
-    </div>
-  </section>`
-);
+  return (
+    `<section class="statistics">
+      <h2 class="visually-hidden">Trip statistics</h2>
+      ${statListElement}
+    </section>`);
+};
 
 export default class Stats extends SmartView {
   constructor(points) {

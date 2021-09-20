@@ -1,8 +1,8 @@
 import PointEditView from '../view/point-edit.js';
 import PointView from '../view/point.js';
-import { render, RenderPosition, KEY_ESCAPE, replace, remove } from '../utils/render.js';
-import {UserAction, UpdateType} from '../const.js';
-import { isOnline } from '../utils/common.js';
+import { render, RenderPosition, replace, remove } from '../utils/render.js';
+import { UserAction, UpdateType } from '../const.js';
+import { isOnline, KEY_ESCAPE } from '../utils/common.js';
 import { toast } from '../utils/toast.js';
 
 const Mode = {

@@ -23,7 +23,7 @@ const STORE_VER = 'v15';
 const STORE_NAME = `${STORE_PREFIX}-${STORE_VER}`;
 
 let statsComponent = null;
-const statsContainerElement = document.querySelector('.page-body__container');
+const statsContainerElement = document.querySelector('.page-main .page-body__container');
 const headerContainerElement = document.querySelector('.trip-main');
 const menuContainerElement = headerContainerElement.querySelector('.trip-controls__navigation');
 const filtersContainerElement = headerContainerElement.querySelector('.trip-controls__filters');
@@ -49,7 +49,7 @@ tripPresenter.init();
 const summaryPresenter = new SummaryPresenter(headerContainerElement, pointsModel);
 summaryPresenter.init();
 
-const PointNewFormCloseHandler = () => {
+const pointNewFormCloseHandler = () => {
   newPointButtonElement.disabled = false;
   menuComponent.setMenuItem(MenuItem.TABLE);
 };
@@ -58,7 +58,7 @@ newPointButtonElement.addEventListener('click', (evt) => {
   if (!isOnline()) {
     toast('You can\'t create new point offline');
   }
-  tripPresenter.createPoint(PointNewFormCloseHandler);
+  tripPresenter.createPoint(pointNewFormCloseHandler);
   newPointButtonElement.disabled = true;
 });
 
@@ -99,7 +99,7 @@ Promise.all([
   });
 
 window.addEventListener('load', () => {
-  navigator.serviceWorker.register('/sw.js');
+  // navigator.serviceWorker.register('/sw.js');
 });
 
 window.addEventListener('online', () => {

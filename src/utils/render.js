@@ -5,8 +5,6 @@ export const RenderPosition = {
   BEFOREEND: 'beforeend',
 };
 
-export const KEY_ESCAPE = 'Escape';
-
 export const render = (container, child, place) => {
   if (container instanceof Abstract) {
     container = container.getElement();

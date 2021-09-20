@@ -30,6 +30,7 @@ self.addEventListener('install', (evt) => {
         '/img/header-bg@2x.png',
         '/img/logo.png',
         '/bundle.js',
+        '/bundle.js.map',
         '/index.html',
       ])),
   );

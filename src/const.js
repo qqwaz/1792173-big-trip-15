@@ -16,10 +16,16 @@ export const FilterType = {
 };
 
 export const SortingType = {
-  DAY: 'Day',
-  TIME: 'Time',
-  PRICE: 'Price',
+  DAY: 'day',
+  EVENT: 'event',
+  TIME: 'time',
+  PRICE: 'price',
+  OFFER: 'offer',
 };
+
+export const DISABLED_SORTING_TYPES = [
+  SortingType.EVENT,
+  SortingType.OFFER];
 
 export const UserAction = {
   UPDATE: 'UPDATE',
@@ -48,3 +54,9 @@ export const MenuItem = {
   TABLE: 'Table',
   STATS: 'Stats',
 };
+
+export const STAT_TYPES = [
+  'money',
+  'type',
+  'time-spend',
+];

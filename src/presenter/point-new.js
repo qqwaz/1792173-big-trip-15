@@ -1,5 +1,6 @@
 import PointEditView from '../view/point-edit.js';
-import { KEY_ESCAPE, remove, render, RenderPosition } from '../utils/render.js';
+import { remove, render, RenderPosition } from '../utils/render.js';
+import { KEY_ESCAPE } from '../utils/common.js';
 import { UserAction, UpdateType } from '../const.js';
 
 export default class PointNew {

@@ -3,3 +3,5 @@ export const capitalize = (string) => string.charAt(0).toUpperCase() + string.sl
 export const getRandomString = () => Math.random().toString(20).substr(2);
 
 export const isOnline = () => window.navigator.onLine;
+
+export const KEY_ESCAPE = 'Escape';

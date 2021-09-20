@@ -289,7 +289,7 @@ export default class PointEdit extends SmartView {
           ['time_24hr']: true,
           dateFormat: 'd/m/y H:i',
           defaultDate: this._data.dateFrom,
-          onClose: this._dateFromPickerChangeHandler,
+          onChange: this._dateFromPickerChangeHandler,
         },
       );
     }
@@ -309,7 +309,7 @@ export default class PointEdit extends SmartView {
           dateFormat: 'd/m/y H:i',
           defaultDate: this._data.dateTo,
           minDate: this._data.dateFrom,
-          onClose: this._dateToPickerChangeHandler,
+          onChange: this._dateToPickerChangeHandler,
         },
       );
     }
@@ -328,6 +328,7 @@ export default class PointEdit extends SmartView {
   }
 
   _typeInputChangeHandler(evt) {
+    evt.preventDefault();
     if (evt.target.classList.contains('event__type-toggle')) {
       return;
     }
@@ -339,6 +340,7 @@ export default class PointEdit extends SmartView {
   }
 
   _destinationInputChangeHandler(evt) {
+    evt.preventDefault();
     const destination = this._destinations.find((item) => item.name === evt.target.value);
     if (!destination) {
       this.updateData({
@@ -357,26 +359,42 @@ export default class PointEdit extends SmartView {
   }
 
   _dateFromPickerChangeHandler([userDate]) {
-    this._dateToPicker.set('minDate', userDate.toISOString());
+    if (!userDate) {
+      this._dateFromPicker.setDate(this._data.dateFrom);
+      return;
+    }
     this.updateData({
       dateFrom: userDate.toISOString(),
-      dateTo: this._data.dateTo < this._data.dateFrom ? this._data.dateFrom : this._data.dateTo,
     }, true);
+    this._dateToPicker.set('minDate', userDate);
+    if (this._dateToPicker.selectedDates[0] >= userDate) {
+      return;
+    }
+    this.updateData({
+      dateTo: userDate.toISOString(),
+    }, true);
+    this._dateToPicker.setDate(this._data.dateTo);
   }
 
   _dateToPickerChangeHandler([userDate]) {
+    if (!userDate) {
+      this._dateToPicker.setDate(this._data.dateTo);
+      return;
+    }
     this.updateData({
       dateTo: userDate.toISOString(),
     }, true);
   }
 
   _priceInputChangeHandler(evt) {
+    evt.preventDefault();
     this.updateData({
       basePrice: Number(evt.target.value),
     }, true);
   }
 
   _offersListChangeHandler(evt) {
+    evt.preventDefault();
     const offerIndex = evt.target.dataset.index;
     this.updateData({
       offers: evt.target.checked
@@ -387,7 +405,6 @@ export default class PointEdit extends SmartView {
 
   _formSubmitHandler(evt) {
     evt.preventDefault();
-
     this._callback.formSubmit(PointEdit.parseDataToPoint(this._data));
   }
 
