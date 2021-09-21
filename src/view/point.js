@@ -1,22 +1,14 @@
-import { createElement } from '../utils.js';
-import dayjs from 'dayjs';
-import duration from 'dayjs/plugin/duration';
+import AbstractView from './abstract.js';
+import { formatDateShort, formatTime, formatPeriod } from '../utils/date.js';
 
 const template = (point) => {
-  const startDate = dayjs(point.dateFrom).format('MMM DD');
-  const startTime = dayjs(point.dateFrom).format('HH:mm');
-  const endTime = dayjs(point.dateTo).format('HH:mm');
-  const durationTime = (() => {
-    const diff = dayjs.extend(duration).duration(dayjs(point.dateTo).diff(point.dateFrom));
-    return [
-      diff.days() ? diff.format('DD[D]') : '',
-      diff.hours() ? diff.format('HH[H]') : '',
-      diff.minutes() ? diff.format('mm[M]') : '',
-    ].join(' ');
-  })();
+  const startDate = formatDateShort(point.dateFrom);
+  const startTime = formatTime(point.dateFrom);
+  const endTime = formatTime(point.dateTo);
+  const duration = formatPeriod(point.dateFrom, point.dateTo);
 
   const icon = `img/icons/${point.type}.png`;
-  const title = `${point.type} ${point.destination.name}`;
+  const title = `${point.type} ${point.destination? point.destination.name : ''}`;
   const price = point.basePrice;
 
   const offersListElement = point.offers
@@ -44,7 +36,7 @@ const template = (point) => {
             &mdash;
             <time class="event__end-time" datetime="2019-03-18T11:00">${endTime}</time>
           </p>
-          <p class="event__duration">${durationTime}</p>
+          <p class="event__duration">${duration}</p>
         </div>
         <p class="event__price">
           &euro;&nbsp;<span class="event__price-value">${price}</span>
@@ -66,26 +58,36 @@ const template = (point) => {
     </li>`;
 };
 
-export default class Event {
+export default class Point extends AbstractView {
   constructor(point) {
+    super();
     this._point = point;
-    this._element = null;
+
+    this._editClickHandler = this._editClickHandler.bind(this);
+    this._favoriteClickHandler = this._favoriteClickHandler.bind(this);
   }
 
   getTemplate() {
     return template(this._point);
   }
 
-  getElement(selector) {
-    if (!this._element) {
-      this._element = createElement(this.getTemplate());
-    }
-    return selector
-      ? this._element.querySelector(selector)
-      : this._element;
+  setEditClickHandler(callback) {
+    this._callback.editClick = callback;
+    this.getElement('.event__rollup-btn').addEventListener('click', this._editClickHandler);
   }
 
-  removeElement() {
-    this._element = null;
+  setFavoriteClickHandler(callback) {
+    this._callback.favoriteClick = callback;
+    this.getElement().querySelector('.event__favorite-btn').addEventListener('click', this._favoriteClickHandler);
+  }
+
+  _editClickHandler(evt) {
+    evt.preventDefault();
+    this._callback.editClick();
+  }
+
+  _favoriteClickHandler(evt) {
+    evt.preventDefault();
+    this._callback.favoriteClick();
   }
 }

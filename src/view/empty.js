@@ -1,4 +1,4 @@
-import { createElement } from '../utils.js';
+import AbstractView from './abstract.js';
 import { FilterType } from '../const.js';
 
 const EmptyMessage = {
@@ -11,25 +11,13 @@ const template = (filter) => `<p class="trip-events__msg">
     ${EmptyMessage[filter]}
   </p>`;
 
-export default class Empty {
+export default class Empty extends AbstractView {
   constructor(filter) {
+    super();
     this._filter = filter;
-    this._element = null;
   }
 
   getTemplate() {
     return template(this._filter);
-  }
-
-  getElement() {
-    if (!this._element) {
-      this._element = createElement(this.getTemplate());
-    }
-
-    return this._element;
-  }
-
-  removeElement() {
-    this._element = null;
   }
 }
