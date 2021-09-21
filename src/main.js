@@ -18,9 +18,6 @@ import Provider from './api/provider.js';
 
 const AUTHORIZATION = `Basic ${getRandomString()}`;
 const END_POINT = 'https://15.ecmascript.pages.academy/big-trip';
-const STORE_PREFIX = 'bigtrip-localstorage';
-const STORE_VER = 'v15';
-const STORE_NAME = `${STORE_PREFIX}-${STORE_VER}`;
 
 let statsComponent = null;
 const statsContainerElement = document.querySelector('.page-main .page-body__container');
@@ -32,7 +29,7 @@ const newPointButtonElement = document.querySelector('.trip-main__event-add-btn'
 const menuComponent = new MenuView();
 
 const api = new Api(END_POINT, AUTHORIZATION);
-const store = new Store(STORE_NAME, window.localStorage);
+const store = new Store(window.localStorage);
 const apiWithProvider = new Provider(api, store);
 
 const pointsModel = new PointsModel();

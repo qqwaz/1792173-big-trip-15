@@ -2,12 +2,7 @@ import AbstractView from './abstract.js';
 import { SortingType, DISABLED_SORTING_TYPES } from '../const.js';
 
 const template = (sorting) => {
-  const sortingListElement = [
-    SortingType.DAY,
-    SortingType.EVENT,
-    SortingType.TIME,
-    SortingType.PRICE,
-    SortingType.OFFER]
+  const sortingListElement = Object.values(SortingType)
     .map((type) => `<div class="trip-sort__item  trip-sort__item--${type}">
       <input id="sort-${type}" class="trip-sort__input  visually-hidden" type="radio" name="trip-sort" value="sort-${type}"
         ${sorting === type ? 'checked' : ''} ${DISABLED_SORTING_TYPES.includes(type) ? 'disabled' : ''}>

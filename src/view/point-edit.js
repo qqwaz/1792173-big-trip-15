@@ -114,9 +114,10 @@ const template = (data, destinations) => {
   );
 
   const createOffersListElement = () => {
-    if (!availableOffers) {
+    if (availableOffers.length === 0) {
       return '';
     }
+
     const offersListElement = availableOffers
       .map((offer, index) => {
         const isChecked = offers.some((item) => offer.title === item.title);
@@ -153,6 +154,10 @@ const template = (data, destinations) => {
   };
 
   const createDestinationDetailsElement = () => {
+    if (!hasDestination) {
+      return '';
+    }
+
     const photosListElement = hasDestination
       ? destination.pictures
         .map((photo) => `<img class="event__photo" src="${photo.src}" alt="${photo.description}">`)

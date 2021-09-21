@@ -3,8 +3,8 @@ import { MenuItem } from '../const.js';
 
 const template = () => (
   `<nav class="trip-controls__trip-tabs  trip-tabs">
-    <a class="trip-tabs__btn  trip-tabs__btn--active" href="#" data-name="${MenuItem.TABLE}">${MenuItem.TABLE}</a>
-    <a class="trip-tabs__btn" href="#" data-name="${MenuItem.STATS}">${MenuItem.STATS}</a>
+    <a class="trip-tabs__btn  trip-tabs__btn--active" href="#">${MenuItem.TABLE}</a>
+    <a class="trip-tabs__btn" href="#">${MenuItem.STATS}</a>
   </nav>`
 );
 
@@ -21,7 +21,7 @@ export default class Menu extends AbstractView {
 
   _menuClickHandler(evt) {
     evt.preventDefault();
-    const menuItem = evt.target.dataset.name;
+    const menuItem = evt.target.textContent;
     if (!menuItem || menuItem === this._activeItem) {
       return;
     }

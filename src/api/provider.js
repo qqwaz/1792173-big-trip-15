@@ -22,7 +22,7 @@ export default class Provider {
     if (isOnline()) {
       return this._api.getOffers()
         .then((offers) => {
-          this._store.setItems(offers, 'offers');
+          this._store.setItems('offers', offers);
           return offers;
         });
     }
@@ -34,7 +34,7 @@ export default class Provider {
     if (isOnline()) {
       return this._api.getDestinations()
         .then((destinations) => {
-          this._store.setItems(destinations, 'destinations');
+          this._store.setItems('destinations', destinations);
           return destinations;
         });
     }
@@ -47,7 +47,7 @@ export default class Provider {
       return this._api.getPoints()
         .then((points) => {
           const items = createStoreStructure(points.map(PointsModel.adaptToServer));
-          this._store.setItems(items, 'points');
+          this._store.setItems('points', items);
           return points;
         });
     }
@@ -97,7 +97,7 @@ export default class Provider {
 
           const items = createStoreStructure([...createdPoints, ...updatedPoints]);
 
-          this._store.setItems(items, 'points');
+          this._store.setItems('points', items);
         });
     }
     return Promise.reject(new Error('Sync data failed'));
