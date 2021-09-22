@@ -5,7 +5,7 @@ import { calcMoney, formatMoney, calcType, formatType, calcTime, formatTime } fr
 import { STAT_TYPES } from '../const.js';
 
 const BAR_HEIGHT = 30;
-const getChartHeigth = (bars) => BAR_HEIGHT * bars;
+const getChartHeight = (bars) => BAR_HEIGHT * bars;
 
 const getConfiguration = (labels, values, formatter, title) => ({
   plugins: [ChartDataLabels],
@@ -73,17 +73,17 @@ const getConfiguration = (labels, values, formatter, title) => ({
 });
 
 const renderMoneyChart = (ctx, data) => {
-  ctx.height = getChartHeigth(data.size);
+  ctx.height = getChartHeight(data.size);
   return new Chart(ctx, getConfiguration([...data.keys()], [...data.values()], formatMoney, 'MONEY'));
 };
 
 const renderTypeChart = (ctx, data) => {
-  ctx.height = getChartHeigth(data.size);
+  ctx.height = getChartHeight(data.size);
   return new Chart(ctx, getConfiguration([...data.keys()], [...data.values()], formatType, 'TYPE'));
 };
 
 const renderTimeChart = (ctx, data) => {
-  ctx.height = getChartHeigth(data.size);
+  ctx.height = getChartHeight(data.size);
   return new Chart(ctx, getConfiguration([...data.keys()], [...data.values()], formatTime, 'TIME-SPEND'));
 };
 
